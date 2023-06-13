@@ -1,0 +1,90 @@
+vsmry <- vdata %>% group_by(Facility_Type)
+
+
+
+df <- data.frame(Facility = c(vdata$), DoseCount = c(vdata$))
+df %>% group_by(Facility) %>% summarise(DoseCountTotal = sum(DoseCount))
+
+Steps:
+library(dplyr)
+FacilityDoseCount <- data.frame(Facility = c(vdata$Facility_Type), DoseCount = c(vdata$Vaccine_Doses_Administered_Count))
+FacilityDoseCountSmry <- FacilityDoseCount %>% group_by(Facility) %>% summarise(DoseCountTotal = sum(DoseCount))
+
+FacilityHealthDoseCount <- data.frame(Facility = c(vdata$Facility_Type),HealthDistrict= c(vdata$Health_District), DoseCount = c(vdata$Vaccine_Doses_Administered_Count))
+
+FacilityBrandDoseCount <- data.frame(Facility = c(vdata$Facility_Type), DoseCount = c(vdata$Vaccine_Doses_Administered_Count))
+FacilityBrandDoseCountSmry <- FacilityBrandDoseCount %>% group_by(Facility, Brand) %>% summarise(DoseCountTotal = sum(DoseCount))
+
+1. Static barplot
+par(mar=c(6, 4, 4, 2) + 0.1)
+barplot(c(FacilityDoseCountSmry$DoseCountTotal),
+        main = "Vaccine Doses Administered by Facility Type",
+        xlab = "Vaccine Doses Administered",
+        ylab = "Facility Type",
+        names.arg = c(FacilityDoseCountSmry$Facility),
+        col = "blue",
+        horiz = TRUE,
+        las = 1)
+
+ggplot2 for bar chart:
+p<-ggplot(data=FacilityDoseCountSmry, aes(x=DoseCountTotal, y=Facility)) +
+  geom_bar(stat="identity", fill = "blue") 
+
+
+ggplot(FacilityDoseCountSmry, aes(x = DoseCountTotal, y = Facility)) +
+geom_bar(aes(color = DoseCountTotal, fill = DoseCountTotal),stat = "identity") +
+scale_x_discrete(labels = unit_format(unit = "K", scale = 1e-3)) +  
+labs(title="Vaccine Doses Administered by Facility Type")
+
+p <- ggplot(FacilityDoseCountSmry, aes(x = Facility, y = DoseCountTotal)) +
+    geom_bar(aes(color = Facility, fill = Facility),stat = "identity",show.legend=FALSE) +
+    scale_y_continuous(labels = unit_format(unit = "K", scale = 1e-3)) +  
+    labs(title="Vaccine Doses Administered by Facility Type")
+p <- p + coord_flip()
+ggplotly(p, tooltip = c("Facility"))
+
+
+p <- ggplot(FacilityHealthDoseCountSmry, aes(x = Facility, y = DoseCountTotal)) +
+    geom_bar(aes(color = Facility, fill = HealthDistrict),stat = "identity",show.legend=FALSE) +
+    scale_y_continuous(labels = unit_format(unit = "K", scale = 1e-3)) +  
+    labs(title="Vaccine Doses Administered by Facility Type and Health District")
+p <- p + coord_flip()
+ggplotly(p, tooltip = c("Doses Administered"))
+
+
+
+p <- ggplot(FCountSmry, aes(x = AdminDate, y = DoseCountTotal)) +
+    geom_bar(aes(color = Admin_Date, fill = Admin_Date),stat = "identity",show.legend=FALSE) +
+    scale_y_continuous(labels = unit_format(unit = "K", scale = 1e-3)) +  
+    labs(title="Vaccine Doses Administered by Administered Date")
+ggplotly(p, tooltip = c("Doses Administered"))
+
+
+p <- ggplot(FacilityBrandDoseCountSmry, aes(x = Facility, y = DoseCountTotal)) +
+    geom_bar(aes(color = Facility, fill = Brand),stat = "identity",show.legend=FALSE) +
+    scale_y_continuous(labels = unit_format(unit = "K", scale = 1e-3)) +  
+    labs(title="Vaccine Doses Administered by Facility Type and Health District")
+p <- p + coord_flip()
+ggplotly(p, tooltip = c("Doses Administered"))
+
+
+hc <- FacilityDoseCountSmry %>% highcharter::highchart('bar', hcaes(x = Facility, y = DoseCountTotal))
+
+
+barplot(sum(c(vdata$Vaccine_Doses_Administered_Count)),
+        main = "Vaccine Doses Administered by Facility Type",
+        xlab = "Vaccine Doses Administered",
+        ylab = "Facility Type",
+        names.arg = c(vdata$Facility_Type),
+        col = "blue",
+        horiz = TRUE,
+        las = 1)
+
+barplot(vdose_count,
+        main = "Vaccine Doses Administered by Facility Type",
+        xlab = "Vaccine Doses Administered",
+        ylab = "Facility Type",
+        names.arg = c(vdata$Facility_Type),
+        col = "blue",
+        horiz = TRUE,
+        las = 1)
