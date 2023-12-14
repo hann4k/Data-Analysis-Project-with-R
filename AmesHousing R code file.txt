@@ -1,0 +1,75 @@
+library(dplyr)
+> library(scales)
+> library(ggplot2)
+> 
+> as.data.frame(
++     list(x = housing_data$Location, 
++          y = housing_data$Price)) %>%
++     ggplot(aes(x, y)) +
++     geom_point() +
++     expand_limits(x = c(0, NA), y = c(0, NA)) +
++     scale_y_continuous(labels = unit_format(unit = "K", scale = 1e-3))
+
+
+
+****************************************
+hdg <- housing_data %>% group_by(Location)
+hd_summary <- summarise(hdg,mean(Price),mean(Crime.Rating))
+names(hd_summary)[2] <- "AvgPrice"
+names(hd_summary)[3] <- "AvgCrimeRating"
+****************************************
+
+
+Step 0: Plotting prices of all homes in NY and FL using bar plot.
+barplot(Pr,names.arg=Loc,ylim=range(pretty(c(0, max(housing_data$Price)))))
+barplot(Pr/1000,names.arg=Loc,ylim=range(pretty(c(0, max(housing_data$Price)/1000)))
+               ,ylab="House Price in thousands"
+               ,col = heat.colors(length(unique(Loc)))[as.factor(Loc)]
+               ,main="House Prices by Location")
+
+Plotting CrimeRating of all houses in NY and FL using barplot.
+barplot(CR,names.arg=Loc,ylim=range(pretty(c(0, max(housing_data$Crime.Rating)))))
+barplot(CR,names.arg=Loc,ylim=range(pretty(c(0, max(housing_data$CrimeRating))))
+               ,ylab="Crime Rating"
+               ,col = heat.colors(length(unique(Loc)))[as.factor(Loc)]
+               ,main="Crime Rating by Location")
+
+Step 1: Plotting Price of all houses in NY and FL using scatter plot.
+****************************** SCATTER PLOT *******************************************
+library(dplyr)
+> library(scales)
+> library(ggplot2)
+> 
+> as.data.frame(
++     list(x = housing_data$Location, 
++          y = housing_data$Price)) %>%
++     ggplot(aes(x, y)) +
++     geom_point() +
++     expand_limits(x = c(0, NA), y = c(0, NA)) +
++     scale_y_continuous(labels = unit_format(unit = "K", scale = 1e-3))
+****************************** BAR CHART **********************************************
+ggplot(housing_data, aes(x = Location, y = mean(Price))) +
+geom_bar(aes(color = Location, fill = Location),stat = "identity", position = position_dodge(0.8),width = 0.7) +
+scale_color_manual(values = c("#0073C2FF", "#EFC000FF"))+
+scale_fill_manual(values = c("#0073C2FF", "#EFC000FF")) + 
+scale_y_continuous(labels = unit_format(unit = "K", scale = 1e-3)) +  
+labs(title="Average House Price by Location")
+
+
+ggplot(housing_data, aes(x = Location, y = mean(CrimeRating))) +
+geom_bar(aes(color = Location, fill = Location),stat = "identity", position = position_dodge(0.8),width = 0.7) +
+scale_color_manual(values = c("#0073C2FF", "#EFC000FF"))+
+scale_fill_manual(values = c("#0073C2FF", "#EFC000FF")) +
+labs(title="Average Crime Rating by Location")+
+ylab("Average Crime Rating") + 
+geom_text(aes(label=mean(CrimeRating)))
+
+
+Step 2: Average price of house at each location
+hdg <- housing_data %>% group_by(Location)
+hdg2 <- summarise(hdg,mean(Price)).
+Step 3: Average price of house overall
+hdg3 <- summarise(housing_data,mean(Price))
+
+
+barplot(Pr,names.arg=Loc,ylim=range(pretty(c(0, max(housing_data$Price)))))
